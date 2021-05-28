@@ -76,9 +76,9 @@ void frmNVR::InitForm()
     columnNames[2] = "地址";
     columnNames[3] = "IP地址";
     columnNames[4] = "类型";
-    columnNames[5] = "用户名";
-    columnNames[6] = "密码";
-    columnNames[7] = "状态";
+//    columnNames[5] = "用户名";
+//    columnNames[6] = "密码";
+//    columnNames[7] = "状态";
 
     int width = myApp::DeskWidth - 246;
     columnWidths[0] = width * 0.08;
@@ -314,9 +314,9 @@ void frmNVR::on_btnExcel_clicked()
     columnNames[2] = "地址";
     columnNames[3] = "IP地址";
     columnNames[4] = "类型";
-    columnNames[5] = "用户名";
-    columnNames[6] = "密码";
-    columnNames[7] = "状态";
+//    columnNames[5] = "用户名";
+//    columnNames[6] = "密码";
+//    columnNames[7] = "状态";
 
     columnWidths[0] = 80;
     columnWidths[1] = 120;
@@ -343,7 +343,9 @@ void frmNVR::on_btnExcel_clicked()
     }
 
     //调用导出数据函数
-    QString title = "硬盘录像机信息";
+//    QString title = "硬盘录像机信息";
+    QString title = "harddisk record info";
+
     ExcelHelper::Instance()->ToExcel(myApp::AppPath + "DB/" + title + ".xls", title, title, columnNames, columnWidths, columnCount, content);
 
     if (myHelper::ShowMessageBoxQuesion("导出数据到Excel成功,现在就打开吗？") == 1) {

@@ -14,7 +14,9 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     iconhelper.cpp \
+    mpvwidget.cpp \
     myapp.cpp \
+    qvideowidget.cpp \
     switchbutton.cpp \
     excelhelper.cpp \
     frmmessagebox.cpp \    
@@ -26,9 +28,11 @@ SOURCES += \
     frmpollconfig.cpp
 
 HEADERS  += \
+    mpvwidget.h \
     myhelper.h \
     iconhelper.h \
     myapp.h \
+    qvideowidget.h \
     switchbutton.h \
     excelhelper.h \
     frmmessagebox.h \
@@ -49,6 +53,9 @@ FORMS    += \
     frmpollconfig.ui
 
 INCLUDEPATH 	+= $$PWD
+INCLUDEPATH += $$PWD/libmpv
+LIBS += $$PWD/libmpv/libmpv.dll.a
+
 
 MOC_DIR         = temp/moc
 RCC_DIR         = temp/rcc

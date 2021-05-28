@@ -79,9 +79,9 @@ void frmIPC::InitForm()
     columnNames[4] = "类型";
     columnNames[5] = "主码流地址";
     columnNames[6] = "子码流地址";
-    columnNames[7] = "用户名";
-    columnNames[8] = "密码";
-    columnNames[9] = "状态";
+//    columnNames[7] = "用户名";
+//    columnNames[8] = "密码";
+//    columnNames[9] = "状态";
 
     int width = myApp::DeskWidth - 246;
     columnWidths[0] = width * 0.06;
@@ -305,9 +305,9 @@ void frmIPC::on_btnExcel_clicked()
     columnNames[4] = "类型";
     columnNames[5] = "主码流地址";
     columnNames[6] = "子码流地址";
-    columnNames[7] = "用户名";
-    columnNames[8] = "密码";
-    columnNames[9] = "状态";
+//    columnNames[7] = "用户名";
+//    columnNames[8] = "密码";
+//    columnNames[9] = "状态";
 
     columnWidths[0] = 60;
     columnWidths[1] = 80;
@@ -336,7 +336,8 @@ void frmIPC::on_btnExcel_clicked()
     }
 
     //调用导出数据函数
-    QString title = "摄像机信息";
+//    QString title = "摄像机信息";
+        QString title = "camera info";
     ExcelHelper::Instance()->ToExcel(myApp::AppPath + "DB/" + title + ".xls", title, title, columnNames, columnWidths, columnCount, content);
 
     if (myHelper::ShowMessageBoxQuesion("导出数据到Excel成功,现在就打开吗？") == 1) {

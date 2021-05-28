@@ -2,6 +2,7 @@
 #define FRMMAIN_H
 
 #include <QDialog>
+#include "mpvwidget.h"
 
 class QMenu;
 class QLabel;
@@ -54,12 +55,15 @@ private:
 
     QList<QLabel *> VideoLab;       //通道显示视频lab载体
     QList<QLayout *> VideoLay;      //通道视频所在lab的layout
+    QList<MpvWidget *> videowidgetlist;
+
 
     void InitStyle();               //初始化无边框窗体
     void InitForm();                //初始化窗体数据
     void InitVideo();               //初始化视频布局载体数据
     void LoadVideo();               //加载配置数据
-    void LoadNVRIPC();              //加载NVR及IPC数据    
+    void LoadNVRIPC();              //加载NVR及IPC数据
+
 
     void removelayout();            //移除所有布局
     void change_video_1(int index); //改变1画面布局

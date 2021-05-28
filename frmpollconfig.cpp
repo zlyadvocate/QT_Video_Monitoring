@@ -360,7 +360,8 @@ void frmPollConfig::on_btnExcel_clicked()
     }
 
     //调用导出数据函数
-    QString title = "轮询摄像机信息";
+//    QString title = "轮询摄像机信息";
+    QString title = "loop camera info";
     ExcelHelper::Instance()->ToExcel(myApp::AppPath + "DB/" + title + ".xls", title, title, columnNames, columnWidths, columnCount, content);
 
     if (myHelper::ShowMessageBoxQuesion("导出数据到Excel成功,现在就打开吗？") == 1) {

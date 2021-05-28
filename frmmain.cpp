@@ -7,6 +7,7 @@
 #include "frmnvr.h"
 #include "frmipc.h"
 #include "frmpollconfig.h"
+#include "mpvwidget.h"
 
 frmMain::frmMain(QWidget *parent) :
     QDialog(parent),
@@ -45,21 +46,22 @@ void frmMain::change_style()
 {
     QAction *action = (QAction *)sender();
     QString style = action->text();
-    if (style == "淡蓝色") {
-        myApp::AppStyle = ":/image/blue.css";
-    } else if (style == "蓝色") {
-        myApp::AppStyle = ":/image/dev.css";
-    } else if (style == "灰色") {
-        myApp::AppStyle = ":/image/gray.css";
-    } else if (style == "黑色") {
-        myApp::AppStyle = ":/image/black.css";
-    } else if (style == "灰黑色") {
-        myApp::AppStyle = ":/image/brown.css";
-    } else if (style == "白色") {
-        myApp::AppStyle = ":/image/white.css";
-    } else if (style == "银色") {
-        myApp::AppStyle = ":/image/silvery.css";
-    }
+    myApp::AppStyle = ":/image/blue.css";
+//    if (style == "淡蓝色") {
+//        myApp::AppStyle = ":/image/blue.css";
+//    } else if (style == "蓝色") {
+//        myApp::AppStyle = ":/image/dev.css";
+//    } else if (style == "灰色") {
+//        myApp::AppStyle = ":/image/gray.css";
+//    } else if (style == "黑色") {
+//        myApp::AppStyle = ":/image/black.css";
+//    } else if (style == "灰黑色") {
+//        myApp::AppStyle = ":/image/brown.css";
+//    } else if (style == "白色") {
+//        myApp::AppStyle = ":/image/white.css";
+//    } else if (style == "银色") {
+//        myApp::AppStyle = ":/image/silvery.css";
+//    }
 
     myHelper::SetStyle(myApp::AppStyle);
     myApp::WriteConfig();
@@ -95,11 +97,11 @@ void frmMain::InitForm()
     ui->labStyle->setProperty("labForm", true);
 
     menuStyle = new QMenu(this);
-    menuStyle->addAction("淡蓝色", this, SLOT(change_style()));
-    menuStyle->addAction("蓝色", this, SLOT(change_style()));
-    menuStyle->addAction("灰色", this, SLOT(change_style()));
-    menuStyle->addAction("黑色", this, SLOT(change_style()));
-    menuStyle->addAction("灰黑色", this, SLOT(change_style()));
+//    menuStyle->addAction("淡蓝色", this, SLOT(change_style()));
+//    menuStyle->addAction("蓝色", this, SLOT(change_style()));zly
+//    menuStyle->addAction("灰色", this, SLOT(change_style()));
+//    menuStyle->addAction("黑色", this, SLOT(change_style()));
+//    menuStyle->addAction("灰黑色", this, SLOT(change_style()));zly
     menuStyle->addAction("白色", this, SLOT(change_style()));
     menuStyle->addAction("银色", this, SLOT(change_style()));
     menuStyle->setStyleSheet("font: 10pt \"微软雅黑\";");
@@ -137,20 +139,30 @@ void frmMain::InitVideo()
     VideoLay.append(ui->lay2);
     VideoLay.append(ui->lay3);
     VideoLay.append(ui->lay4);
+//    MpvWidget* m_mpvwidget=new MpvWidget(ui->labVideo1);
 
     for (int i = 0; i < 16; i++) {
         VideoLab[i]->installEventFilter(this);
         VideoLab[i]->setProperty("labVideo", true);
         VideoLab[i]->setText(QString("通道%1").arg(i + 1));
+        MpvWidget* m_mpvwidget=new MpvWidget(ui->labVideo1);
+        m_mpvwidget->m_id=VideoLab[i]->winId();
+        videowidgetlist.append(m_mpvwidget);
+
+        QUrl url;
+        url.setUrl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+        videowidgetlist[i]->start(url);
+
     }
+    qDebug() << "qvideowidget::init"<< "\n";
 
     menu = new QMenu(this);
     menu->setStyleSheet("font: 10pt \"微软雅黑\";");
     menu->addAction("删除当前视频", this, SLOT(delete_video_one()));
-    menu->addAction("删除所有视频", this, SLOT(delete_video_all()));
+//    menu->addAction("删除所有视频", this, SLOT(delete_video_all()));//zly
     menu->addSeparator();
-    menu->addAction("截图当前视频", this, SLOT(snapshot_video_one()));
-    menu->addAction("截图所有视频", this, SLOT(snapshot_video_all()));
+//    menu->addAction("截图当前视频", this, SLOT(snapshot_video_one()));//zly
+//    menu->addAction("截图所有视频", this, SLOT(snapshot_video_all()));
     menu->addSeparator();
 
     QMenu *menu1 = menu->addMenu("切换到1画面");
@@ -187,6 +199,7 @@ void frmMain::InitVideo()
 void frmMain::LoadVideo()
 {
     //自动应用最后一次的布局配置
+    qDebug() << "LoadVideo::"<< "\n";
     ChangeVideoLayout();
 }
 
@@ -488,14 +501,20 @@ void frmMain::show_video_4()
 
 void frmMain::change_video_4(int index)
 {
+
+
     for (int i = (index + 0); i < (index + 2); i++) {
         VideoLay[0]->addWidget(VideoLab[i]);
         VideoLab[i]->setVisible(true);
+
+
+
     }
 
     for (int i = (index + 2); i < (index + 4); i++) {
         VideoLay[1]->addWidget(VideoLab[i]);
         VideoLab[i]->setVisible(true);
+//         videowidgetlist[i]->start(url);
     }
 }
 
