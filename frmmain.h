@@ -2,6 +2,12 @@
 #define FRMMAIN_H
 
 #include <QDialog>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QMimeType>
+#include <QUrl>
+#include <QTextStream>
+
 #include "mpvwidget.h"
 
 class QMenu;
@@ -44,6 +50,10 @@ private slots:
     void on_btnMenu_Close_clicked();
     void on_btnMenu_Min_clicked();
     void on_treeMain_doubleClicked(const QModelIndex &index);
+    //for drag and drop support
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     Ui::frmMain *ui;    

@@ -19,7 +19,9 @@ SOURCES += \
     qvideowidget.cpp \
     switchbutton.cpp \
     excelhelper.cpp \
-    frmmessagebox.cpp \    
+    frmmessagebox.cpp \
+    tlable.cpp \
+    treewidget.cpp \
     frmmain.cpp \
     frminputbox.cpp \    
     frmconfig.cpp \    
@@ -37,7 +39,9 @@ HEADERS  += \
     excelhelper.h \
     frmmessagebox.h \
     frmmain.h \
-    frminputbox.h \    
+    frminputbox.h \
+    tlable.h \
+    treewidget.h \
     frmconfig.h \    
     frmnvr.h \
     frmipc.h \

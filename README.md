@@ -7,4 +7,8 @@ In the "file" folder, there is an executable program "VM", a config file "config
 
 You can execute the "VM" program to view the GUI. Since the program was built for a high school and a kindergarten in Shanghai, the language used in the program is Chinese.
 
-If you compile the souce code by yourself, before you run the program, please remember to copy the config file and the database file from the "file" folder to your compiled folder (make sure the "config.txt" and the "VM.db" are in same path with the "VM" executable program).
+If you compile the souce code by yoursef, before you run the program, please remember to copy the config file and the database file from the "file" folder to your compiled folder (make sure the "config.txt" and the "VM.db" are in same path with the "VM" executable program).
+
+1.add MPV to decode video streams.
+
+next:add drop and drog function to add streams.

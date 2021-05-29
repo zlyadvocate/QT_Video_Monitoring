@@ -433,7 +433,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QTreeWidget" name="treeMain">
+       <widget class="TreeWidget" name="treeMain">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -517,7 +517,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo2">
+            <widget class="TLable" name="labVideo2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -548,7 +548,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo3">
+            <widget class="TLable" name="labVideo3">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -579,7 +579,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo4">
+            <widget class="TLable" name="labVideo4">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -617,7 +617,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="labVideo5">
+            <widget class="TLable" name="labVideo5">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -648,7 +648,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo6">
+            <widget class="TLable" name="labVideo6">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -679,7 +679,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo7">
+            <widget class="TLable" name="labVideo7">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -710,7 +710,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo8">
+            <widget class="TLable" name="labVideo8">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -748,7 +748,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="labVideo9">
+            <widget class="TLable" name="labVideo9">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -779,7 +779,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo10">
+            <widget class="TLable" name="labVideo10">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -810,7 +810,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo11">
+            <widget class="TLable" name="labVideo11">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -841,7 +841,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo12">
+            <widget class="TLable" name="labVideo12">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -879,7 +879,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="labVideo13">
+            <widget class="TLable" name="labVideo13">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -910,7 +910,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo14">
+            <widget class="TLable" name="labVideo14">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -941,7 +941,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo15">
+            <widget class="TLable" name="labVideo15">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -972,7 +972,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labVideo16">
+            <widget class="TLable" name="labVideo16">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -1013,6 +1013,18 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>treewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TLable</class>
+   <extends>QLabel</extends>
+   <header>tlable.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

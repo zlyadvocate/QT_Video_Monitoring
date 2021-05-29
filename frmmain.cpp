@@ -9,6 +9,9 @@
 #include "frmpollconfig.h"
 #include "mpvwidget.h"
 
+
+
+
 frmMain::frmMain(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::frmMain)
@@ -20,6 +23,8 @@ frmMain::frmMain(QWidget *parent) :
     this->InitVideo();
     this->LoadVideo();
     this->LoadNVRIPC();
+    //zly
+  this->setAcceptDrops(false);
 }
 
 frmMain::~frmMain()
@@ -659,6 +664,31 @@ void frmMain::on_treeMain_doubleClicked(const QModelIndex &index)
             break;
         }
     }
+}
+
+void frmMain::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("text")) {
+        QByteArray byteArray = event->mimeData()->data("text");
+        qDebug() <<"drop event:"<< byteArray.data();
+        event->acceptProposedAction();
+    }
+
+}
+
+void frmMain::dropEvent(QDropEvent *event)
+{
+    if(event->mimeData()->hasFormat("text"))
+    {
+        QByteArray byteArray = event->mimeData()->data("text");
+        qDebug() <<"drop event:"<< byteArray.data();
+
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else
+        event->ignore();
+
 }
 
 void frmMain::screen_full()
