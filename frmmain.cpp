@@ -166,8 +166,9 @@ void frmMain::InitVideo()
     menu->addAction("删除当前视频", this, SLOT(delete_video_one()));
 //    menu->addAction("删除所有视频", this, SLOT(delete_video_all()));//zly
     menu->addSeparator();
-//    menu->addAction("截图当前视频", this, SLOT(snapshot_video_one()));//zly
-//    menu->addAction("截图所有视频", this, SLOT(snapshot_video_all()));
+    menu->addAction("当前视频截图 ", this, SLOT(snapshot_video_one()));//zly
+    menu->addAction("所有视频截图 ", this, SLOT(snapshot_video_all()));//zly
+
     menu->addSeparator();
 
     QMenu *menu1 = menu->addMenu("切换到1画面");
@@ -216,6 +217,7 @@ void frmMain::ChangeRtspAddr(int ch, QString rtspAddr)
     QString tempRtspAddr16;
     for (int i = 0; i < 16; i++) {
         tempRtspAddr16 += rtspAddrs[i] + "|";
+        qDebug()<<"rtsp address:"<<i<<"is_"<<rtspAddrs[i] <<"\n";
     }
     myApp::RtspAddr16 = tempRtspAddr16.mid(0, tempRtspAddr16.length() - 1);
 }
@@ -648,6 +650,7 @@ void frmMain::on_treeMain_doubleClicked(const QModelIndex &index)
     QString IPCRtspAddrMain;
     QString IPCRtspAddrSub;
     GetRtspAddr(NVRID, IPCIP, IPCRtspAddrMain, IPCRtspAddrSub);
+    qDebug()<<"rtsp main"<<IPCRtspAddrMain<<"sub is:"<<IPCRtspAddrSub<<"\n";
     rtspAddr = (myApp::RtspType == 0 ? IPCRtspAddrMain : IPCRtspAddrSub);
 
     //如果该摄像机不在线

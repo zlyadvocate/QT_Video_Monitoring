@@ -31,6 +31,8 @@ protected:
     //drop释放事件
     void dropEvent(QDropEvent* event) override;
 private:
+    void GetRtspAddr(QString NVRID, QString IPCIP, QString &IPCRtspAddrMain, QString &IPCRtspAddrSub);
+    QString GetNVRID(QString NVRIP);
     //拖放显示控件
     QLabel* label;
 

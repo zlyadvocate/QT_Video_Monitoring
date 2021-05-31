@@ -32,35 +32,27 @@ QLabel(parent)
 
 void TLable::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("text")) {
-        QByteArray byteArray = event->mimeData()->data("text");
-        QString m_data=GetCorrectUnicode(byteArray);
-        qDebug()<<m_data;
-//        QString string=byteArray;
-//        QTextCodec *tc = QTextCodec::codecForName("UTF8");
-//        QString str = tc->toUnicode(byteArray);
-//        QString text = QTextCodec::codecForName("GBK")->toUnicode(byteArray);
-        qDebug() <<"dragEnterEvent:"<< byteArray.data();
-        event->acceptProposedAction();
+    if(event->mimeData()->hasText())
+    {
+        QString mydata=event->mimeData()->text();
+//        qDebug()<<"TLable::dragEnterEvent text is:"<<mydata;
+         event->acceptProposedAction();
+
     }
 
 }
 
 void TLable::dropEvent(QDropEvent *event)
 {
-    if(event->mimeData()->hasFormat("text"))
+    if(event->mimeData()->hasText())
     {
-        QByteArray byteArray = event->mimeData()->data("text");
-        QString m_data=GetCorrectUnicode(byteArray);
-        qDebug()<<m_data;
-
-        qDebug() <<"drop event:"<< byteArray.data();
-
+        QString mydata=event->mimeData()->text();
+//        qDebug()<<"TLable::dropEvent text is:"<<mydata;
+        //update MPV url
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
     else
         event->ignore();
-
 
 }
