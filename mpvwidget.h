@@ -10,6 +10,7 @@ class MpvWidget : public QWidget
     Q_OBJECT
 public:
     explicit MpvWidget(QWidget *parent = nullptr);
+    ~MpvWidget();
     quint64 m_id;
     bool start(const QUrl &url);
 

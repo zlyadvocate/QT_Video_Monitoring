@@ -14,6 +14,8 @@ TreeWidget::TreeWidget(QWidget *parent) :
 
 }
 
+
+
 void TreeWidget::mousePressEvent(QMouseEvent *event)
 {
     _selectItem= static_cast<QTreeWidgetItem*>(this->itemAt(event->pos()));

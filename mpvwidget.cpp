@@ -6,8 +6,17 @@ MpvWidget::MpvWidget(QWidget *parent) : QWidget(parent)
 
 }
 
+MpvWidget::~MpvWidget()
+{
+    if (m_mpv)
+           mpv_terminate_destroy(m_mpv);
+
+}
+
 bool MpvWidget::start(const QUrl &url)
 {
+
+
     qDebug() << "MpvVideoPlayerBackend::start url =" << url << "\n";
     //        if (state() == PermanentError)
     //            return false;
@@ -19,13 +28,13 @@ bool MpvWidget::start(const QUrl &url)
         return false;
     }
 
-    //        if (m_mpv)
-    //        {
-    //            int pause = 1;
-    //            mpv_set_property(m_mpv, "pause", MPV_FORMAT_FLAG, &pause);
-    //            mpv_terminate_destroy(m_mpv);
-    //            m_mpv = NULL;
-    //        }
+//            if (m_mpv)
+//            {
+//                int pause = 1;
+//                mpv_set_property(m_mpv, "pause", MPV_FORMAT_FLAG, &pause);
+//                mpv_terminate_destroy(m_mpv);
+//                m_mpv = NULL;
+//            }
     qDebug() << "MpvWidget: start create MPV \n";
 
     if (!createMpvProcess())

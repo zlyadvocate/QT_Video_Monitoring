@@ -150,13 +150,15 @@ void frmMain::InitVideo()
         VideoLab[i]->installEventFilter(this);
         VideoLab[i]->setProperty("labVideo", true);
         VideoLab[i]->setText(QString("通道%1").arg(i + 1));
-        MpvWidget* m_mpvwidget=new MpvWidget(ui->labVideo1);
-        m_mpvwidget->m_id=VideoLab[i]->winId();
-        videowidgetlist.append(m_mpvwidget);
+        QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+//
+//         TLable* m_tlable=static_cast<TLable *>(VideoLab[i]);
+//        TLable* m_tlable=dynamic_cast<TLable *>(VideoLab[i]);
+        VideoLab[i]->start(rtspurl);
 
-        QUrl url;
-        url.setUrl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-        videowidgetlist[i]->start(url);
+//         m_tlable->start(rtspurl);
+//        VideoLab[i]->start(rtspurl);
+
 
     }
     qDebug() << "qvideowidget::init"<< "\n";

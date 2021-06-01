@@ -20,14 +20,31 @@ QString GetCorrectUnicode(const QByteArray &ba)
     }
     return text;
 }
-//————————————————
-//版权声明：本文为CSDN博主「阳光柠檬_」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-//原文链接：https://blog.csdn.net/liukang325/article/details/80986472
+
 
 TLable::TLable(QWidget *parent):
 QLabel(parent)
 {
     setAcceptDrops(true);
+    m_mpvwidget=new MpvWidget(this);
+    m_mpvwidget->m_id=winId();
+    qDebug()<<"TLable::start";
+
+//    qDebug()<<"class name is:"<<metaObject()->className()<<"objectName"<<objectName()<<text();
+
+
+}
+
+bool TLable::start(const QUrl &url)
+{
+     qDebug()<<"TLable::start";
+     qDebug()<<"class name is:"<<metaObject()->className()<<"objectName"<<objectName()<<text();
+
+     m_mpvwidget->m_id=winId();
+qDebug()<<"m_mpvwidget::mid"<< m_mpvwidget->m_id;
+    return m_mpvwidget->start(url);
+
+
 }
 
 void TLable::dragEnterEvent(QDragEnterEvent *event)
@@ -35,7 +52,6 @@ void TLable::dragEnterEvent(QDragEnterEvent *event)
     if(event->mimeData()->hasText())
     {
         QString mydata=event->mimeData()->text();
-//        qDebug()<<"TLable::dragEnterEvent text is:"<<mydata;
          event->acceptProposedAction();
 
     }

@@ -9,6 +9,7 @@
 #include <QTextStream>
 
 #include "mpvwidget.h"
+#include "tlable.h"
 
 class QMenu;
 class QLabel;
@@ -63,8 +64,10 @@ private:
     QLabel *tempLab;                //临时播放视频的标签
     bool video_max;                 //通道是否处于最大化
 
-    QList<QLabel *> VideoLab;       //通道显示视频lab载体
+//    QList<QLabel *> VideoLab;       //通道显示视频lab载体
+     QList<TLable *> VideoLab;       //通道显示视频lab载体
     QList<QLayout *> VideoLay;      //通道视频所在lab的layout
+    QList<QString> rtspaddresslist;
     QList<MpvWidget *> videowidgetlist;
 
 

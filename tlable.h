@@ -8,13 +8,17 @@
 #include <QDragMoveEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include "mpvwidget.h"
 
 
 class TLable : public QLabel
 {
+ Q_OBJECT
 public:
 
           explicit TLable(QWidget *parent = nullptr);
+      bool start(const QUrl &url);
+
 protected:
 
 
@@ -25,6 +29,8 @@ protected:
     //drop释放事件
     void dropEvent(QDropEvent* event) override;
 private:
+    MpvWidget* m_mpvwidget;
+    Q_DISABLE_COPY(TLable)
 
 };
 
