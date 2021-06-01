@@ -150,17 +150,19 @@ void frmMain::InitVideo()
         VideoLab[i]->installEventFilter(this);
         VideoLab[i]->setProperty("labVideo", true);
         VideoLab[i]->setText(QString("通道%1").arg(i + 1));
-        QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+//        QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
 //
 //         TLable* m_tlable=static_cast<TLable *>(VideoLab[i]);
 //        TLable* m_tlable=dynamic_cast<TLable *>(VideoLab[i]);
-        VideoLab[i]->start(rtspurl);
+//        VideoLab[i]->start(rtspurl);
+
 
 //         m_tlable->start(rtspurl);
 //        VideoLab[i]->start(rtspurl);
 
 
     }
+    loadvideoview();
     qDebug() << "qvideowidget::init"<< "\n";
 
     menu = new QMenu(this);
@@ -573,6 +575,28 @@ void frmMain::show_video_16()
     int index = 0;
     change_video_16(index);
     myApp::WriteConfig();
+}
+
+void frmMain::loadvideoview()
+{
+    QSqlQuery query;
+    QString sql = "select [id],[url] from [videoviewurl]";
+     query.exec(sql);
+    while(query.next()) {
+        //取出子码流地址,看是否IP相同
+        qint8 id = query.value(0).toInt();
+         QString videourl = query.value(1).toString();
+        QString m_remark = query.value(2).toString();
+      qDebug()<<"id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
+      QUrl m_videourl(videourl);
+//      if((id>0)&&(id<16))
+      VideoLab[id]->start(m_videourl);
+
+    }
+//    QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+//     QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+
+//     VideoLab[0]->start(rtspurl);
 }
 
 void frmMain::change_video_16(int index)

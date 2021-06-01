@@ -1,5 +1,6 @@
 #include "mpvwidget.h"
 #include <QDebug>
+#include <QUrl>
 
 MpvWidget::MpvWidget(QWidget *parent) : QWidget(parent)
 {
@@ -44,11 +45,17 @@ bool MpvWidget::start(const QUrl &url)
     }
 
 
-
 //    m_playbackSpeed = 1.0;
-    qDebug() << "MpvWidget:: MPV createMpvProcess sucess\n";
+  //  qDebug() << "MpvWidget:: MPV createMpvProcess sucess\n";
 
-    const char *args[] = { "loadfile", "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov", NULL };
+
+
+    QString n=url.toString();
+    QByteArray bate = n.toLocal8Bit();
+    const char *c_str24=bate.data();
+
+    qDebug()<<"url c_str24"<<c_str24;
+    const char *args[] = { "loadfile", c_str24, NULL };
     mpv_command(m_mpv, args);//ok
 
     return true;
