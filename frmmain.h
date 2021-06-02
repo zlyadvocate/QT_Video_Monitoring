@@ -64,6 +64,7 @@ private:
     QMenu *menuStyle;               //样式菜单
     QMenu *menu;                    //鼠标右键菜单对象
     QLabel *tempLab;                //临时播放视频的标签
+    TLable *tempTLab;                //临时播放视频的标签
     bool video_max;                 //通道是否处于最大化
 
 //    QList<QLabel *> VideoLab;       //通道显示视频lab载体
@@ -89,6 +90,7 @@ private:
     QString GetNVRID(QString NVRIP);//获取NVR编号
 
     void ChangeVideoLayout();       //改变通道布局    
+    void AudioMuteAll();
 
     //对应改变通道rtsp地址
     void ChangeRtspAddr(int ch, QString rtspAddr);

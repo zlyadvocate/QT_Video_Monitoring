@@ -18,6 +18,12 @@ public:
 
           explicit TLable(QWidget *parent = nullptr);
       bool start(const QUrl &url);
+      void audiomute();
+      void audioon();
+      bool  audio_mute=false;
+      void audiotoggle();
+
+
 
 protected:
 

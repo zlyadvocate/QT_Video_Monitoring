@@ -288,6 +288,14 @@ void frmMain::ChangeVideoLayout()
     }
 }
 
+void frmMain::AudioMuteAll()
+{
+    for (int i = 0; i < 16; i++)
+    {
+        VideoLab[i]->audiomute();
+    }
+}
+
 void frmMain::keyPressEvent(QKeyEvent *event)
 {
     //空格键进入全屏,esc键退出全屏
@@ -368,6 +376,12 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
             return true;
         } else {
             tempLab = qobject_cast<QLabel *>(obj);
+//            tempTLab= qobject_cast<TLable *>(obj);
+//            qDebug()<<"select text is"<<tempLab->text();
+
+//            tempTLab->audiotoggle();
+
+
             ui->lab_Title->setText(QString("%1  当前选中[%2]").arg(myApp::AppTitle).arg(tempLab->text()));
             return true;
         }

@@ -13,6 +13,8 @@ public:
     ~MpvWidget();
     quint64 m_id;
     bool start(const QUrl &url);
+    void audiomute();
+    void audioon();
 
 
 signals:
@@ -24,6 +26,7 @@ private:
     mpv_handle *m_mpv;
     bool createMpvProcess();
     void handleMpvEvent(mpv_event *event);
+
 };
 
 #endif // MPVWIDGET_H

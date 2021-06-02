@@ -88,17 +88,22 @@ bool MpvWidget::createMpvProcess()
 
     {
         //        QSettings settings;
+//                QString vo =  QLatin1String("opengl,direct3d,sdl");
                 QString vo =  QLatin1String("opengl,direct3d,sdl");
+
 
         //        if (vo == QLatin1String("default"))
         //    #ifdef Q_OS_WIN
-//                    vo = QLatin1String("opengl,direct3d,sdl");
+                    vo = QLatin1String("direct3d");
         //    #else
         //            vo = QLatin1String("");
         //    #endif
-        //        mpv_set_option_string(m_mpv, "vo", vo.toAscii().data());
+                mpv_set_option_string(m_mpv, "vo", "direct3d");
+
     }
 
+    mpv_set_option_string(m_mpv, "mute", "yes");
+    mpv_set_option_string(m_mpv, "hwdec", "auto");
 
     mpv_set_option_string(m_mpv, "input-default-bindings", "yes");
     mpv_set_option_string(m_mpv, "input-vo-keyboard", "yes");
@@ -212,4 +217,14 @@ void MpvWidget::handleMpvEvent(mpv_event *event)
     }
     default: ; // Ignore uninteresting or unknown events.
     }
+}
+
+void MpvWidget::audiomute()
+{
+    mpv_set_option_string(m_mpv, "mute", "yes");
+}
+
+void MpvWidget::audioon()
+{
+     mpv_set_option_string(m_mpv, "mute", "no");
 }
