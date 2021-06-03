@@ -27,6 +27,7 @@ QLabel(parent)
 {
     setAcceptDrops(true);
     m_mpvwidget=new MpvWidget(this);
+//    setCentralWidget(this);
     m_mpvwidget->m_id=winId();
     qDebug()<<"TLable::start";
 
@@ -37,11 +38,11 @@ QLabel(parent)
 
 bool TLable::start(const QUrl &url)
 {
-     qDebug()<<"TLable::start";
-     qDebug()<<"class name is:"<<metaObject()->className()<<"objectName"<<objectName()<<text();
+    qDebug()<<"TLable::start";
+    qDebug()<<"class name is:"<<metaObject()->className()<<"objectName"<<objectName()<<text();
 
-     m_mpvwidget->m_id=winId();
-qDebug()<<"m_mpvwidget::mid"<< m_mpvwidget->m_id;
+    m_mpvwidget->m_id=winId();
+    qDebug()<<"m_mpvwidget::mid"<< m_mpvwidget->m_id;
     return m_mpvwidget->start(url);
 
 
@@ -49,26 +50,40 @@ qDebug()<<"m_mpvwidget::mid"<< m_mpvwidget->m_id;
 
 void TLable::audiomute()
 {
-    m_mpvwidget->audiomute();
+    if(m_mpvwidget)
+        m_mpvwidget->audiomute();
 
 }
 
 void TLable::audioon()
 {
+    if(m_mpvwidget)
     m_mpvwidget->audioon();
 }
 
 void TLable::audiotoggle()
 {
-    if(audio_mute==false)
+    if(m_mpvwidget)
     {
-        audio_mute=true;
-        m_mpvwidget->audiomute();
-    }else
-    {
-        audio_mute=false;
-        m_mpvwidget->audioon();
+
+        if(audio_mute==false)
+        {
+            audio_mute=true;
+            qDebug()<<"audio_mute=true";
+            m_mpvwidget->audiomute();
+        }else
+        {
+            audio_mute=false;
+            qDebug()<<"audio_mute=false";
+            m_mpvwidget->audioon();
+        }
     }
+}
+
+void TLable::screenshot()
+{
+    if(m_mpvwidget)
+    m_mpvwidget->screenshot();
 }
 
 void TLable::dragEnterEvent(QDragEnterEvent *event)

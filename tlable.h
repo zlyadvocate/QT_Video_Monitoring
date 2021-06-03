@@ -13,15 +13,16 @@
 
 class TLable : public QLabel
 {
- Q_OBJECT
+    Q_OBJECT
 public:
 
-          explicit TLable(QWidget *parent = nullptr);
-      bool start(const QUrl &url);
-      void audiomute();
-      void audioon();
-      bool  audio_mute=false;
-      void audiotoggle();
+    explicit TLable(QWidget *parent = nullptr);
+    bool start(const QUrl &url);
+    void audiomute();
+    void audioon();
+    bool audio_mute=true;
+    void audiotoggle();
+    void screenshot();
 
 
 

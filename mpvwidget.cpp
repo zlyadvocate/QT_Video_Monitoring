@@ -10,7 +10,7 @@ MpvWidget::MpvWidget(QWidget *parent) : QWidget(parent)
 MpvWidget::~MpvWidget()
 {
     if (m_mpv)
-           mpv_terminate_destroy(m_mpv);
+        mpv_terminate_destroy(m_mpv);
 
 }
 
@@ -29,13 +29,13 @@ bool MpvWidget::start(const QUrl &url)
         return false;
     }
 
-//            if (m_mpv)
-//            {
-//                int pause = 1;
-//                mpv_set_property(m_mpv, "pause", MPV_FORMAT_FLAG, &pause);
-//                mpv_terminate_destroy(m_mpv);
-//                m_mpv = NULL;
-//            }
+    //            if (m_mpv)
+    //            {
+    //                int pause = 1;
+    //                mpv_set_property(m_mpv, "pause", MPV_FORMAT_FLAG, &pause);
+    //                mpv_terminate_destroy(m_mpv);
+    //                m_mpv = NULL;
+    //            }
     qDebug() << "MpvWidget: start create MPV \n";
 
     if (!createMpvProcess())
@@ -45,8 +45,8 @@ bool MpvWidget::start(const QUrl &url)
     }
 
 
-//    m_playbackSpeed = 1.0;
-  //  qDebug() << "MpvWidget:: MPV createMpvProcess sucess\n";
+    //    m_playbackSpeed = 1.0;
+    //  qDebug() << "MpvWidget:: MPV createMpvProcess sucess\n";
 
 
 
@@ -88,21 +88,21 @@ bool MpvWidget::createMpvProcess()
 
     {
         //        QSettings settings;
-//                QString vo =  QLatin1String("opengl,direct3d,sdl");
-                QString vo =  QLatin1String("opengl,direct3d,sdl");
+        //                QString vo =  QLatin1String("opengl,direct3d,sdl");
+        QString vo =  QLatin1String("opengl,direct3d,sdl");
 
 
         //        if (vo == QLatin1String("default"))
-        //    #ifdef Q_OS_WIN
-                    vo = QLatin1String("direct3d");
-        //    #else
+#ifdef Q_OS_WIN
+        vo = QLatin1String("direct3d");
+#else
         //            vo = QLatin1String("");
-        //    #endif
-                mpv_set_option_string(m_mpv, "vo", "direct3d");
+#endif
+        mpv_set_option_string(m_mpv, "vo", "direct3d");
 
     }
 
-    mpv_set_option_string(m_mpv, "mute", "yes");
+    mpv_set_option_string(m_mpv, "mute", "no");
     mpv_set_option_string(m_mpv, "hwdec", "auto");
 
     mpv_set_option_string(m_mpv, "input-default-bindings", "yes");
@@ -125,14 +125,23 @@ bool MpvWidget::createMpvProcess()
         qDebug() << "MpvVideoPlayerBackend: mpv failed to initialize!\n";
         return false;
     }
+    audiomute();//
 
     return true;
 }
 
 void MpvWidget::handleMpvEvent(mpv_event *event)
 {
+    if (event->event_id == MPV_EVENT_NONE)
+        return;
+
     switch (event->event_id)
     {
+    case MPV_EVENT_FILE_LOADED:
+        m_state = VIDEO_PLAYING;
+        showText(QByteArrayLiteral(" m_state = VIDEO_PLAYING..."));
+        break;
+
     case MPV_EVENT_PROPERTY_CHANGE:
     {
         mpv_event_property *prop = (mpv_event_property *)event->data;
@@ -140,14 +149,7 @@ void MpvWidget::handleMpvEvent(mpv_event *event)
         {
             if (prop->format == MPV_FORMAT_DOUBLE)
             {
-//                m_position = *(double *)prop->data;
 
-                //                       if (m_state == Backward)
-                //                           playBackward();
-                //                       else if (m_state == Forward)
-                //                           playForward();
-
-                //                       emit currentPosition(m_position);
             }
         }
         else if (strcmp(prop->name, "time-pos") == 0)
@@ -162,14 +164,45 @@ void MpvWidget::handleMpvEvent(mpv_event *event)
             if (prop->format == MPV_FORMAT_DOUBLE)
             {
                 double duration = *(double *)prop->data;
-                //                       if (m_duration != duration)
-                //                       {
-                //                           m_duration = duration;
 
-                //                           if (m_duration > 0)
-                //                               mpv_set_option_string(m_mpv, "hr-seek", "yes");
-                //                           durationIsKnown();
-                //                       }
+            }
+        }
+        else if (strcmp(prop->name, "pause") == 0)
+        {
+            if (m_state == VIDEO_PLAYING)
+            {
+                m_state = VIDEO_PAUSED;
+                showText(QByteArrayLiteral(" m_state = VIDEO_PAUSED..."));
+            }
+            else if (m_state == VIDEO_PAUSED)
+            {
+                m_state = VIDEO_PLAYING;
+                showText(QByteArrayLiteral(" m_state = VIDEO_PLAYING..."));
+            }
+            //            emit stateChanged();
+        }
+
+        else if (strcmp(prop->name,"paused-for-cache") == 0)
+        {
+            if ( m_state != STOPPED)
+            {
+                showText(QByteArrayLiteral("Network is slow..."));
+            }
+            else
+            {
+                showText(QByteArrayLiteral(""));
+            }
+        }
+
+        else if (strcmp(prop->name, "core-idle") == 0)
+        {
+            if ( m_state == VIDEO_PLAYING)
+            {
+                showText(QByteArrayLiteral("Buffering..."));
+            }
+            else
+            {
+                showText(QByteArrayLiteral(""));
             }
         }
 
@@ -193,8 +226,8 @@ void MpvWidget::handleMpvEvent(mpv_event *event)
         case MPV_END_FILE_REASON_QUIT:
         case MPV_END_FILE_REASON_ERROR:
         case MPV_END_FILE_REASON_REDIRECT:
-             break;
-//        default: m_position = -1;
+            break;
+            //        default: m_position = -1;
         }
 
         break;
@@ -219,12 +252,115 @@ void MpvWidget::handleMpvEvent(mpv_event *event)
     }
 }
 
+///////////////////////////////////////////////////////////
+///
+///
+
+
+
+
+///
+
+
+
+void MpvWidget::showText(const QByteArray &text)
+{
+    const char *args[] = {"show-text", text.constData(), nullptr};
+    uint64_t reply_userdata;
+    mpv_command_async(m_mpv,reply_userdata,args);
+
+    //    m_mpv.command_async(args);
+}
+
+void MpvWidget::handleMpvError(int code)
+{
+    if (code < 0)
+    {
+        qDebug() << "MPV Error: " << mpv_error_string(code);
+    }
+
+}
+
 void MpvWidget::audiomute()
 {
-    mpv_set_option_string(m_mpv, "mute", "yes");
+    showText(QByteArrayLiteral(" audiomute"));
+    if (m_mpv)
+    {
+        qDebug() << "MpvWidget audiomute:";
+//        mpv_set_option_string(m_mpv, "mute", "yes");
+          setVolume(0);
+    }
+
 }
 
 void MpvWidget::audioon()
 {
-     mpv_set_option_string(m_mpv, "mute", "no");
+    showText(QByteArrayLiteral(" audioon"));
+    if (m_mpv)
+    {
+        qDebug() << "MpvWidget audioon:";
+//        mpv_set_option_string(m_mpv, "mute", "no");
+        setVolume(80);
+    }
+}
+
+void MpvWidget::screenshot()
+{
+    showText(QByteArrayLiteral(" screenshot"));
+    if (m_mpv)
+    {
+        qDebug() << "MpvWidget screenshot:";
+        uint64_t reply_userdata;
+        //         if (m_state == STOPPED)
+        //             return;
+        const char *args[] = {"osd-msg", "screenshot", nullptr};
+        mpv_command_async(m_mpv,reply_userdata,args);
+
+    }
+}
+
+void MpvWidget::setVolume(int volume)
+{
+    //    if (m_volume == volume)
+    //        return;
+
+    //    m_volume = volume;
+    uint64_t reply_userdata;
+    double mdara=static_cast<double>(volume);
+    void *p=&mdara;
+
+    m_set_property_async(reply_userdata,"volume", MPV_FORMAT_DOUBLE,p);
+
+    showText(QByteArrayLiteral("Volume: ") + QByteArray::number(volume));
+
+}
+
+int MpvWidget::m_command_async(uint64_t reply_userdata, const char **args)
+{
+   return  mpv_command_async(m_mpv,reply_userdata,args);
+}
+
+int MpvWidget::m_set_property(const char *name, mpv_format format, void *data)
+{
+    return mpv_set_property(m_mpv,name,format,data);
+}
+
+int MpvWidget::m_set_property_string(const char *name, const char *data)
+{
+    return mpv_set_property_string(m_mpv,name,data);
+}
+
+int MpvWidget::m_set_property_async(uint64_t reply_userdata, const char *name, mpv_format format, void *data)
+{
+   return  mpv_set_property_async(m_mpv,reply_userdata,name,format,data);
+}
+
+int MpvWidget::m_get_property(const char *name, mpv_format format, void *data)
+{
+    return mpv_get_property(m_mpv,name,format,data);
+}
+
+char *MpvWidget::m_get_property_string(const char *name)
+{
+    return mpv_get_property_string(m_mpv,name);
 }

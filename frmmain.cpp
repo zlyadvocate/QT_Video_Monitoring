@@ -17,6 +17,7 @@ frmMain::frmMain(QWidget *parent) :
     ui(new Ui::frmMain)
 {
     ui->setupUi(this);
+    setMaximumSize(1920, 1080);
 
     this->InitStyle();
     this->InitForm();
@@ -150,17 +151,6 @@ void frmMain::InitVideo()
         VideoLab[i]->installEventFilter(this);
         VideoLab[i]->setProperty("labVideo", true);
         VideoLab[i]->setText(QString("通道%1").arg(i + 1));
-//        QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-//
-//         TLable* m_tlable=static_cast<TLable *>(VideoLab[i]);
-//        TLable* m_tlable=dynamic_cast<TLable *>(VideoLab[i]);
-//        VideoLab[i]->start(rtspurl);
-
-
-//         m_tlable->start(rtspurl);
-//        VideoLab[i]->start(rtspurl);
-
-
     }
     loadvideoview();
     qDebug() << "qvideowidget::init"<< "\n";
@@ -204,6 +194,8 @@ void frmMain::InitVideo()
     menu9->addAction("通道8-通道16", this, SLOT(show_video_9()));
 
     menu->addAction("切换到16画面", this, SLOT(show_video_16()));
+
+
 }
 
 void frmMain::LoadVideo()
@@ -290,8 +282,9 @@ void frmMain::ChangeVideoLayout()
 
 void frmMain::AudioMuteAll()
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < sizeof(VideoLab); i++)
     {
+//       if(vid)
         VideoLab[i]->audiomute();
     }
 }
@@ -312,17 +305,25 @@ void frmMain::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void frmMain::showEvent(QShowEvent *e)
+{
+    this->setAttribute(Qt::WA_Mapped);
+    QWidget::showEvent(e);
+}
+
 bool frmMain::eventFilter(QObject *obj, QEvent *event)
 {
     QMouseEvent *MouseEvent = static_cast<QMouseEvent *>(event);
     if ((event->type() == QEvent::MouseButtonDblClick) &&
             (MouseEvent->buttons() == Qt::LeftButton)) {
         QLabel *labDouble = qobject_cast<QLabel *>(obj);
+        tempTLab= qobject_cast<TLable *>(obj);
         if (!video_max) {
             removelayout();
             video_max = true;
             VideoLay[0]->addWidget(labDouble);
             labDouble->setVisible(true);
+            tempTLab->audioon();
         } else {
             video_max = false;
             ChangeVideoLayout();
@@ -376,8 +377,13 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
             return true;
         } else {
             tempLab = qobject_cast<QLabel *>(obj);
-//            tempTLab= qobject_cast<TLable *>(obj);
-//            qDebug()<<"select text is"<<tempLab->text();
+            tempTLab= qobject_cast<TLable *>(obj);
+//           qDebug()<<"select text is"<<tempLab->text();
+//           if(tempLab->text()=="通道1")
+//               {
+//               qDebug()<<"通道1 __________audioon";
+//                tempTLab->audioon();
+//                }
 
 //            tempTLab->audiotoggle();
 
@@ -412,7 +418,9 @@ void frmMain::delete_video_all()
 
 void frmMain::snapshot_video_one()
 {
-
+     qDebug()<<"select text is"<<tempLab->text();
+    if(tempTLab)
+       tempTLab->screenshot();
 }
 
 void frmMain::snapshot_video_all()
@@ -441,6 +449,7 @@ void frmMain::removelayout()
         VideoLay[3]->removeWidget(VideoLab[i]);
         VideoLab[i]->setVisible(false);
     }
+     AudioMuteAll();
 }
 
 void frmMain::show_video_1()
@@ -485,8 +494,10 @@ void frmMain::show_video_1()
     } else if (name == "通道16") {
         index = 15;
     }
-
+qDebug()<<"index"<<index<<"VideoLab audio on";
     change_video_1(index);
+
+
     myApp::WriteConfig();
 }
 
@@ -496,6 +507,8 @@ void frmMain::change_video_1(int index)
         VideoLay[0]->addWidget(VideoLab[i]);
         VideoLab[i]->setVisible(true);
     }
+    VideoLab[index]->audioon();
+    qDebug()<<"index"<<index<<"VideoLab audio on";
 }
 
 void frmMain::show_video_4()
@@ -526,14 +539,9 @@ void frmMain::show_video_4()
 
 void frmMain::change_video_4(int index)
 {
-
-
     for (int i = (index + 0); i < (index + 2); i++) {
         VideoLay[0]->addWidget(VideoLab[i]);
         VideoLab[i]->setVisible(true);
-
-
-
     }
 
     for (int i = (index + 2); i < (index + 4); i++) {
@@ -596,21 +604,21 @@ void frmMain::loadvideoview()
     QSqlQuery query;
     QString sql = "select [id],[url] from [videoviewurl]";
      query.exec(sql);
-    while(query.next()) {
-        //取出子码流地址,看是否IP相同
-        qint8 id = query.value(0).toInt();
+     while(query.next()) {
+         //取出子码流地址,看是否IP相同
+         qint8 id = query.value(0).toInt();
          QString videourl = query.value(1).toString();
-        QString m_remark = query.value(2).toString();
-      qDebug()<<"id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
-      QUrl m_videourl(videourl);
-//      if((id>0)&&(id<16))
-      VideoLab[id]->start(m_videourl);
+         QString m_remark = query.value(2).toString();
+         qDebug()<<"id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
+         QUrl m_videourl(videourl);
+         //      if((id>0)&&(id<16))
+         VideoLab[id]->start(m_videourl);
+//         VideoLab[id]->audioon();//
 
-    }
-//    QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-//     QUrl rtspurl("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+     }
 
-//     VideoLab[0]->start(rtspurl);
+//     VideoLab[0]->audioon();
+
 }
 
 void frmMain::change_video_16(int index)
@@ -750,4 +758,9 @@ void frmMain::screen_normal()
     ui->widget_main->layout()->setContentsMargins(5, 5, 5, 5);
     ui->widget_title->setVisible(true);
     ui->treeMain->setVisible(true);
+}
+
+void frmMain::on_labStart_linkActivated(const QString &link)
+{
+
 }

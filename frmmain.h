@@ -31,6 +31,7 @@ public:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void showEvent(QShowEvent *e);
 
 private slots:
     void change_style();            //切换样式
@@ -54,6 +55,8 @@ private slots:
     void on_btnMenu_Min_clicked();
     void on_treeMain_doubleClicked(const QModelIndex &index);
     //for drag and drop support
+    void on_labStart_linkActivated(const QString &link);
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
