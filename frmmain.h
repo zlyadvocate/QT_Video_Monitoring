@@ -62,7 +62,8 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-    Ui::frmMain *ui;    
+    Ui::frmMain *ui;
+    qint8 channelcnt=0;
 
     QMenu *menuStyle;               //样式菜单
     QMenu *menu;                    //鼠标右键菜单对象

@@ -282,11 +282,20 @@ void frmMain::ChangeVideoLayout()
 
 void frmMain::AudioMuteAll()
 {
-    for (int i = 0; i < sizeof(VideoLab); i++)
-    {
-//       if(vid)
-        VideoLab[i]->audiomute();
-    }
+    QSqlQuery query;
+    QString sql = "select [id],[url] from [videoviewurl]";
+     query.exec(sql);
+     while(query.next()) {
+         //取出子码流地址,看是否IP相同
+         qint8 id = query.value(0).toInt();
+         QString videourl = query.value(1).toString();
+         QString m_remark = query.value(2).toString();
+         qDebug()<<"id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
+         QUrl m_videourl(videourl);
+         //      if((id>0)&&(id<16))
+         VideoLab[id]->audiomute();
+     }
+
 }
 
 void frmMain::keyPressEvent(QKeyEvent *event)
@@ -326,7 +335,10 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
             tempTLab->audioon();
         } else {
             video_max = false;
+            qDebug()<<"select video_max!!!!!!!! is"<<tempLab->text();
             ChangeVideoLayout();
+             qDebug()<<"select video_max!!!!!!!! is"<<tempLab->text();
+//            AudioMuteAll();
         }
 
         labDouble->setFocus();
@@ -614,8 +626,10 @@ void frmMain::loadvideoview()
          //      if((id>0)&&(id<16))
          VideoLab[id]->start(m_videourl);
 //         VideoLab[id]->audioon();//
+         channelcnt=id;
 
      }
+
 
 //     VideoLab[0]->audioon();
 
