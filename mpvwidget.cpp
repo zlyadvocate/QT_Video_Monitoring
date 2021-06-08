@@ -75,14 +75,16 @@ void MpvWidget::receiveMpvEvents()
 
 bool MpvWidget::createMpvProcess()
 {
-    m_mpv = mpv_create();
-    qDebug() << "qvideowidget::createMpvProcess() start!\n";
-
     if (!m_mpv)
     {
         qDebug() << "MpvVideoPlayerBackend: Can't create mpv instance!\n";
         return false;
     }
+
+    m_mpv = mpv_create();
+    qDebug() << "MpvWidget::createMpvProcess() ______start!\n";
+
+
 
     mpv_set_option(m_mpv, "wid", MPV_FORMAT_INT64, &m_id);
 
@@ -101,6 +103,8 @@ bool MpvWidget::createMpvProcess()
         mpv_set_option_string(m_mpv, "vo", "direct3d");
 
     }
+    //请求级别日志消息
+      mpv_request_log_messages(m_mpv, "info");
 
     mpv_set_option_string(m_mpv, "mute", "no");
     mpv_set_option_string(m_mpv, "hwdec", "auto");
@@ -115,11 +119,12 @@ bool MpvWidget::createMpvProcess()
     mpv_observe_property(m_mpv, 0, "duration", MPV_FORMAT_DOUBLE);
     mpv_observe_property(m_mpv, 0, "pause", MPV_FORMAT_FLAG);
 
-    mpv_request_log_messages(m_mpv, "error");  // no fatal error warn info v debug trace
+//    mpv_request_log_messages(m_mpv, "error");  // no fatal error warn info v debug trace
+     mpv_request_log_messages(m_mpv, "info");  // no fatal error warn info v debug trace
 
     connect(this, SIGNAL(mpvEvents()), this, SLOT(receiveMpvEvents()), Qt::QueuedConnection);
     //    mpv_set_wakeup_callback(m_mpv, wakeup, this);
-    qDebug() << "qvideowidget::mpv_initialize start!\n";
+    qDebug() << "MpvWidget::mpv_initialize start!\n";
     if (mpv_initialize(m_mpv) < 0)
     {
         qDebug() << "MpvVideoPlayerBackend: mpv failed to initialize!\n";
@@ -129,6 +134,7 @@ bool MpvWidget::createMpvProcess()
 
     return true;
 }
+
 
 void MpvWidget::handleMpvEvent(mpv_event *event)
 {
@@ -215,6 +221,7 @@ void MpvWidget::handleMpvEvent(mpv_event *event)
     case MPV_EVENT_END_FILE:
     {
         mpv_event_end_file *eef = (mpv_event_end_file*) event->data;
+          showText(QByteArrayLiteral("MPV_EVENT_END_FILE..."));
         switch (eef->reason)
         {
         case MPV_END_FILE_REASON_EOF:
@@ -284,6 +291,7 @@ void MpvWidget::handleMpvError(int code)
 void MpvWidget::audiomute()
 {
     showText(QByteArrayLiteral(" audiomute"));
+
     if (m_mpv)
     {
         qDebug() << "MpvWidget audiomute:";
@@ -295,12 +303,13 @@ void MpvWidget::audiomute()
 
 void MpvWidget::audioon()
 {
-    showText(QByteArrayLiteral(" audioon"));
+    showText(QByteArrayLiteral("audioon"));
     if (m_mpv)
     {
-        qDebug() << "MpvWidget audioon:";
+
 //        mpv_set_option_string(m_mpv, "mute", "no");
         setVolume(80);
+        qDebug() << "MpvWidget audio_____on: volumn 80";
     }
 }
 
@@ -329,7 +338,8 @@ void MpvWidget::setVolume(int volume)
     double mdara=static_cast<double>(volume);
     void *p=&mdara;
 
-    m_set_property_async(reply_userdata,"volume", MPV_FORMAT_DOUBLE,p);
+//    m_set_property_async(reply_userdata,"volume", MPV_FORMAT_DOUBLE,p);
+    m_set_property("volume", MPV_FORMAT_DOUBLE,p);
 
     showText(QByteArrayLiteral("Volume: ") + QByteArray::number(volume));
 
@@ -363,4 +373,10 @@ int MpvWidget::m_get_property(const char *name, mpv_format format, void *data)
 char *MpvWidget::m_get_property_string(const char *name)
 {
     return mpv_get_property_string(m_mpv,name);
+}
+
+void MpvWidget::enablelog()
+{
+    mpv_set_option_string(m_mpv, "log-file", "g:\\mov\\mpvbin\\123.log");
+
 }

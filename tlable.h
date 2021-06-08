@@ -23,10 +23,14 @@ public:
     bool audio_mute=true;
     void audiotoggle();
     void screenshot();
+    void enablelog();
+
 
 
 
 protected:
+     void showEvent(QShowEvent *e);
+     void resizeEvent( QResizeEvent * event );
 
 
 

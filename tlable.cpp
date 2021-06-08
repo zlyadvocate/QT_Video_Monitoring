@@ -29,7 +29,12 @@ QLabel(parent)
     m_mpvwidget=new MpvWidget(this);
 //    setCentralWidget(this);
     m_mpvwidget->m_id=winId();
-    qDebug()<<"TLable::start";
+    //zly
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->setSizePolicy(sizePolicy);
+       //zly
+        this->setAttribute(Qt::WA_Mapped);
+    qDebug()<<"TLable::constructor";
 
 //    qDebug()<<"class name is:"<<metaObject()->className()<<"objectName"<<objectName()<<text();
 
@@ -50,6 +55,7 @@ bool TLable::start(const QUrl &url)
 
 void TLable::audiomute()
 {
+    qDebug()<<text()<<objectName();
     if(m_mpvwidget)
         m_mpvwidget->audiomute();
 
@@ -57,6 +63,9 @@ void TLable::audiomute()
 
 void TLable::audioon()
 {
+   qDebug()<<"TLable::audioon()";
+
+   qDebug()<<text()<<objectName();
     if(m_mpvwidget)
     m_mpvwidget->audioon();
 }
@@ -83,7 +92,25 @@ void TLable::audiotoggle()
 void TLable::screenshot()
 {
     if(m_mpvwidget)
-    m_mpvwidget->screenshot();
+        m_mpvwidget->screenshot();
+}
+
+void TLable::enablelog()
+{
+    if(m_mpvwidget)
+        m_mpvwidget->enablelog();
+}
+
+void TLable::showEvent(QShowEvent *e)
+{
+    setAttribute(Qt::WA_Mapped);
+    QWidget::showEvent(e);
+}
+
+void TLable::resizeEvent(QResizeEvent *event)
+{
+    qDebug()<<" TLable::resizeEvent";
+
 }
 
 void TLable::dragEnterEvent(QDragEnterEvent *event)

@@ -29,6 +29,7 @@ public:
     int m_get_property(const char *name, mpv_format format,
                          void *data);
     char *m_get_property_string( const char *name);
+    void enablelog();
 
 signals:
     void mpvEvents();

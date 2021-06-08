@@ -8,6 +8,8 @@
 #include "frmipc.h"
 #include "frmpollconfig.h"
 #include "mpvwidget.h"
+//for sleep
+#include <windows.h>
 
 
 
@@ -18,6 +20,7 @@ frmMain::frmMain(QWidget *parent) :
 {
     ui->setupUi(this);
     setMaximumSize(1920, 1080);
+    this->setAttribute(Qt::WA_Mapped);
 
     this->InitStyle();
     this->InitForm();
@@ -77,30 +80,40 @@ void frmMain::InitForm()
 {
     ui->labFull->installEventFilter(this);
     ui->labFull->setProperty("labForm", true);
+    ui->labFull->setAttribute(Qt::WA_Mapped);
 
     ui->labStart->installEventFilter(this);
     ui->labStart->setProperty("labForm", true);
+    ui->labStart->setAttribute(Qt::WA_Mapped);
 
     ui->labNVR->installEventFilter(this);
     ui->labNVR->setProperty("labForm", true);
+    ui->labNVR->setAttribute(Qt::WA_Mapped);
+
 
     ui->labIPC->installEventFilter(this);
     ui->labIPC->setProperty("labForm", true);
+    ui->labIPC->setAttribute(Qt::WA_Mapped);
 
     ui->labPollConfig->installEventFilter(this);
     ui->labPollConfig->setProperty("labForm", true);
+    ui->labPollConfig->setAttribute(Qt::WA_Mapped);
 
     ui->labVideoPlayBack->installEventFilter(this);
     ui->labVideoPlayBack->setProperty("labForm", true);
+    ui->labVideoPlayBack->setAttribute(Qt::WA_Mapped);
 
     ui->labConfig->installEventFilter(this);
     ui->labConfig->setProperty("labForm", true);
+    ui->labConfig->setAttribute(Qt::WA_Mapped);
 
     ui->labExit->installEventFilter(this);
     ui->labExit->setProperty("labForm", true);
+    ui->labExit->setAttribute(Qt::WA_Mapped);
 
     ui->labStyle->installEventFilter(this);
     ui->labStyle->setProperty("labForm", true);
+    ui->labExit->setAttribute(Qt::WA_Mapped);
 
     menuStyle = new QMenu(this);
 //    menuStyle->addAction("淡蓝色", this, SLOT(change_style()));
@@ -117,6 +130,7 @@ void frmMain::InitForm()
 
     ui->treeMain->header()->setVisible(false);
     ui->treeMain->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->treeMain->setAttribute(Qt::WA_Mapped);
 }
 
 void frmMain::InitVideo()
@@ -153,7 +167,7 @@ void frmMain::InitVideo()
         VideoLab[i]->setText(QString("通道%1").arg(i + 1));
     }
     loadvideoview();
-    qDebug() << "qvideowidget::init"<< "\n";
+//    qDebug() << "qvideowidget::init"<< "\n";
 
     menu = new QMenu(this);
     menu->setStyleSheet("font: 10pt \"微软雅黑\";");
@@ -166,6 +180,7 @@ void frmMain::InitVideo()
     menu->addSeparator();
 
     QMenu *menu1 = menu->addMenu("切换到1画面");
+    menu1->addAction("audio1", this, SLOT(video1audioon()));
     menu1->addAction("通道1", this, SLOT(show_video_1()));
     menu1->addAction("通道2", this, SLOT(show_video_1()));
     menu1->addAction("通道3", this, SLOT(show_video_1()));
@@ -221,6 +236,7 @@ void frmMain::ChangeRtspAddr(int ch, QString rtspAddr)
 void frmMain::LoadNVRIPC()
 {
     ui->treeMain->clear();
+//     ui->treeMain
 
     QSqlQuery queryNVR;
     QString sqlNVR = "select [NVRID],[NVRName],[NVRIP] from [NVRInfo] where [NVRUse]='启用'";
@@ -290,9 +306,7 @@ void frmMain::AudioMuteAll()
          qint8 id = query.value(0).toInt();
          QString videourl = query.value(1).toString();
          QString m_remark = query.value(2).toString();
-         qDebug()<<"id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
-         QUrl m_videourl(videourl);
-         //      if((id>0)&&(id<16))
+
          VideoLab[id]->audiomute();
      }
 
@@ -325,7 +339,8 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
     QMouseEvent *MouseEvent = static_cast<QMouseEvent *>(event);
     if ((event->type() == QEvent::MouseButtonDblClick) &&
             (MouseEvent->buttons() == Qt::LeftButton)) {
-        QLabel *labDouble = qobject_cast<QLabel *>(obj);
+//        QLabel *labDouble = qobject_cast<QLabel *>(obj);
+        TLable *labDouble = qobject_cast<TLable *>(obj);
         tempTLab= qobject_cast<TLable *>(obj);
         if (!video_max) {
             removelayout();
@@ -333,14 +348,15 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
             VideoLay[0]->addWidget(labDouble);
             labDouble->setVisible(true);
             tempTLab->audioon();
+
         } else {
-            video_max = false;
-            qDebug()<<"select video_max!!!!!!!! is"<<tempLab->text();
+            video_max = false;        
             ChangeVideoLayout();
              qDebug()<<"select video_max!!!!!!!! is"<<tempLab->text();
 //            AudioMuteAll();
         }
 
+//         qDebug()<<"select video_max!!!!!!!! is"<<tempLab->text();
         labDouble->setFocus();
         return true;
     } else if (event->type() == QEvent::MouseButtonPress) {
@@ -390,15 +406,6 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
         } else {
             tempLab = qobject_cast<QLabel *>(obj);
             tempTLab= qobject_cast<TLable *>(obj);
-//           qDebug()<<"select text is"<<tempLab->text();
-//           if(tempLab->text()=="通道1")
-//               {
-//               qDebug()<<"通道1 __________audioon";
-//                tempTLab->audioon();
-//                }
-
-//            tempTLab->audiotoggle();
-
 
             ui->lab_Title->setText(QString("%1  当前选中[%2]").arg(myApp::AppTitle).arg(tempLab->text()));
             return true;
@@ -506,7 +513,7 @@ void frmMain::show_video_1()
     } else if (name == "通道16") {
         index = 15;
     }
-qDebug()<<"index"<<index<<"VideoLab audio on";
+
     change_video_1(index);
 
 
@@ -521,6 +528,7 @@ void frmMain::change_video_1(int index)
     }
     VideoLab[index]->audioon();
     qDebug()<<"index"<<index<<"VideoLab audio on";
+
 }
 
 void frmMain::show_video_4()
@@ -559,7 +567,7 @@ void frmMain::change_video_4(int index)
     for (int i = (index + 2); i < (index + 4); i++) {
         VideoLay[1]->addWidget(VideoLab[i]);
         VideoLab[i]->setVisible(true);
-//         videowidgetlist[i]->start(url);
+
     }
 }
 
@@ -611,27 +619,40 @@ void frmMain::show_video_16()
     myApp::WriteConfig();
 }
 
+void frmMain::video1audioon()
+{
+    VideoLab[0]->enablelog();
+}
+
 void frmMain::loadvideoview()
 {
+/*    QUrl m_videourl("http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8");
+     VideoLab[0]->start(m_videourl)*/;
+    //
     QSqlQuery query;
     QString sql = "select [id],[url] from [videoviewurl]";
      query.exec(sql);
+      qDebug()<<"loadvideoview"<<"____________*******************";
      while(query.next()) {
          //取出子码流地址,看是否IP相同
          qint8 id = query.value(0).toInt();
          QString videourl = query.value(1).toString();
          QString m_remark = query.value(2).toString();
-         qDebug()<<"id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
-         QUrl m_videourl(videourl);
-         //      if((id>0)&&(id<16))
-         VideoLab[id]->start(m_videourl);
+
+         if(videourl.size()>5)
+         {
+          qDebug()<<"____id"<<id<<"videourl"<<videourl<<"m_remark"<<m_remark;
+             QUrl m_videourl(videourl);
+             //      if((id>0)&&(id<16))
+             VideoLab[id]->start(m_videourl);
+         }
+//        Sleep(1);
 //         VideoLab[id]->audioon();//
          channelcnt=id;
-
      }
 
 
-//     VideoLab[0]->audioon();
+
 
 }
 
@@ -761,6 +782,7 @@ void frmMain::screen_full()
     this->setGeometry(qApp->desktop()->geometry());
     this->layout()->setContentsMargins(0, 0, 0, 0);
     ui->widget_main->layout()->setContentsMargins(0, 0, 0, 0);
+    ui->widget_main->setAttribute(Qt::WA_Mapped);
     ui->widget_title->setVisible(false);
     ui->treeMain->setVisible(false);
 }
@@ -770,6 +792,11 @@ void frmMain::screen_normal()
     this->setGeometry(qApp->desktop()->availableGeometry());
     this->layout()->setContentsMargins(1, 1, 1, 1);
     ui->widget_main->layout()->setContentsMargins(5, 5, 5, 5);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    this->windowHandle()->setFlags(Qt::FramelessWindowHint);
+    this->windowHandle()->showFullScreen();
+
+
     ui->widget_title->setVisible(true);
     ui->treeMain->setVisible(true);
 }

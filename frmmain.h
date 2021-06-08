@@ -49,6 +49,9 @@ private slots:
     void show_video_9();            //切换到9画面
     void show_video_16();           //切换到16画面
 
+    void video1audioon();            //切换到1画面
+
+
     void loadvideoview();
 
     void on_btnMenu_Close_clicked();
@@ -64,8 +67,9 @@ protected:
 private:
     Ui::frmMain *ui;
     qint8 channelcnt=0;
+    TLable tmp;//zly 2021/6/4
 
-    QMenu *menuStyle;               //样式菜单
+    QMenu *menuStyle;               //样式菜单/
     QMenu *menu;                    //鼠标右键菜单对象
     QLabel *tempLab;                //临时播放视频的标签
     TLable *tempTLab;                //临时播放视频的标签
